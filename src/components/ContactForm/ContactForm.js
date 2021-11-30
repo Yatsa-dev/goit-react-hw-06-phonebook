@@ -1,30 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import contactsActions from '../../redux/actions';
-import { getContacts } from '../../redux/selectors';
 import { IoIosPersonAdd } from 'react-icons/io';
 import s from './ContactForm.module.css';
 
 export default function ContactForm() {
   const [name, useName] = useState('');
   const [number, useNumber] = useState('');
-  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
-
-  const contactCheck = () => {
-    const nameInclude = contacts.reduce(
-      (acc, contact) => [...acc, contact.name],
-      [],
-    );
-    const numbersInclude = contacts.reduce(
-      (acc, contact) => [...acc, contact.number],
-      [],
-    );
-    if (nameInclude.includes(name) || numbersInclude.includes(number)) {
-      alert(`${name}${number} is already in contacts`);
-    }
-  };
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -41,12 +25,9 @@ export default function ContactForm() {
     }
   }
   const handleSubmit = event => {
-    if (contactCheck()) {
-      return;
-    }
     event.preventDefault();
-    reset();
     dispatch(contactsActions.addContact({ name, number }));
+    reset();
   };
   const reset = () => {
     useName('');

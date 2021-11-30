@@ -9,7 +9,10 @@ const initialState = [
   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
 ];
 const items = createReducer(initialState, {
-  [actions.addContact]: (state, { payload }) => [...state, payload],
+  [actions.addContact]: (state, { payload }) =>
+    state.find(e => e.name.toLowerCase() === payload.name.toLowerCase())
+      ? alert(`${payload.name} is already in contacts`)
+      : [...state, payload],
   [actions.deleteContact]: (state, { payload }) =>
     state.filter(({ id }) => id !== payload),
 });
